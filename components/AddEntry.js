@@ -11,6 +11,8 @@ import { submitEntry, removeEntry } from '../utils/api';
 import { connect } from 'react-redux';
 import { addEntry } from '../actions';
 import { purple } from '../utils/colors';
+import { NavigationActions, } from 'react-navigation'
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 SubmitBtn = ({ onPress }) => {
     return (
@@ -108,6 +110,7 @@ class AddEntry extends Component {
         this.props.dispatch(addEntry({
             [key]: entry
         }))
+        this.toHome()
         submitEntry(key, entry)
     }
     reset = () => {
@@ -115,7 +118,13 @@ class AddEntry extends Component {
         this.props.dispatch(addEntry({
             [key]: getDailyReminderValue()
         }))
+        this.toHome()
         removeEntry(key)
+    }
+    toHome = () => {
+        this.props.navigation.dispatch(NavigationActions.back({
+            key: 'AddEntry'
+        }))
     }
     render() {
         if (this.props.arleadyLogged) {
@@ -127,7 +136,6 @@ class AddEntry extends Component {
                 </View>
             )
         }
-
         let metricInfo = getMetricMetaInfo();
         metricInfo = Object.keys(metricInfo).map(key => {
             const value = this.state[key]
